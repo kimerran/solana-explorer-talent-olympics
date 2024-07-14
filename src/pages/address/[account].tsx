@@ -56,7 +56,7 @@ const SplTokenMint = (params: { info: any }) => {
   const { info } = params;
   return (
     <>
-      <Text>SPL Token Account</Text>
+      <Text>SPL Token Mint</Text>
       <Stat>
         <StatLabel color={"teal"}>Decimals</StatLabel>
         <StatHelpText>{info.decimals}</StatHelpText>
@@ -130,14 +130,12 @@ const AccountDetails: NextPage = () => {
               {accountInfo?.value?.owner}
             </Link>
           </StatNumber>
-          {/* <StatHelpText>Feb 12 - Feb 28</StatHelpText> */}
         </Stat>
         <Stat>
           <StatLabel color={"teal"}>SOL</StatLabel>
           <StatNumber>
             {(Number(accountInfo?.value?.lamports) / 1000000000).toFixed(9)}
           </StatNumber>
-          {/* <StatHelpText>Feb 12 - Feb 28</StatHelpText> */}
         </Stat>
         <Divider />
       </Box>
