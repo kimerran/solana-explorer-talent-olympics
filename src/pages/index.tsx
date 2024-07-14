@@ -137,7 +137,7 @@ const Home: NextPage = () => {
         <Center paddingBottom={10} marginTop={5}>
           <Input
             maxWidth={500}
-            placeholder="Search DevNet Transaction ex. 32o3ZzfxzLjH3cufaUB91ERaBBRkqWTZHYuUtuMFS8ooaVT8FttfzEh3V3eaSfZ3rK6TYwzyu7KELfMGhbRv3NJV"
+            placeholder="Enter Tx Signature or Account Address (press enter)"
             size="lg"
             onKeyDown={(e) => {
               if (e.key ==='Enter') {

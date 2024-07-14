@@ -49,7 +49,6 @@ const InstructionDetailCard = (params: { ins: InstructionType }) => {
   return (
     <Card maxW={800} marginBottom={2}>
       <CardBody>
-        {/* <IconButton aria-label="Search database" icon={<TriangleUpIcon />} /> */}
         <Stack direction={"row"} alignContent={"initial"}>
           <Text>
             {ins.program && (
@@ -182,17 +181,22 @@ const TxSignatureDetails: NextPage = () => {
         </Heading>
       </Center>
 
+      <Center>
       <Box paddingBottom={5} marginTop={5}>
         <Heading>Transaction</Heading>
-
         <Divider />
         {txInfo && <TxInfoCard tx={txInfo} />}
       </Box>
 
+
+      </Center>
+
+      <Center>
       <Box>
         <Text fontSize={32}>Instructions</Text>
         {txInfo && <InstructionsTable instructions={instructionsData!} />}
       </Box>
+      </Center>
     </Container>
   );
 };

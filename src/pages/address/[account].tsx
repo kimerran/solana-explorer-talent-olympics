@@ -80,16 +80,16 @@ const SplTokenMint = (params: { info: any }) => {
 const AccountDataParsed = (params: { parsedInfo: AccountInfoParsed }) => {
   const { parsedInfo } = params;
   return (
-    <Stack direction={"column"}>
-      {parsedInfo.program === "spl-token" &&
-        parsedInfo.parsed.type === "account" && (
-          <SplTokenAccount info={parsedInfo.parsed.info} />
-        )}
-      {parsedInfo.program === "spl-token" &&
-        parsedInfo.parsed.type === "mint" && (
-          <SplTokenMint info={parsedInfo.parsed.info} />
-        )}
-    </Stack>
+      <Stack marginLeft={10} direction={"column"}>
+        {parsedInfo.program === "spl-token" &&
+          parsedInfo.parsed.type === "account" && (
+            <SplTokenAccount info={parsedInfo.parsed.info} />
+          )}
+        {parsedInfo.program === "spl-token" &&
+          parsedInfo.parsed.type === "mint" && (
+            <SplTokenMint info={parsedInfo.parsed.info} />
+          )}
+      </Stack>
   );
 };
 
@@ -114,34 +114,36 @@ const AccountDetails: NextPage = () => {
         </Heading>
       </Center>
 
-      <Box paddingBottom={5} marginTop={5}>
-        <Heading>{isProgram ? "Program" : "Account"}</Heading>
-        <Badge colorScheme="red">
-          <Text fontSize={24}>{router?.query?.account}</Text>
-        </Badge>
-        <Divider />
-        <Stat>
-          <StatLabel color={"teal"}>Owner</StatLabel>
-          <StatNumber>
-            <Link
-              color="red.500"
-              href={`/address/${accountInfo?.value?.owner}`}
-            >
-              {accountInfo?.value?.owner}
-            </Link>
-          </StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel color={"teal"}>SOL</StatLabel>
-          <StatNumber>
-            {(Number(accountInfo?.value?.lamports) / 1000000000).toFixed(9)}
-          </StatNumber>
-        </Stat>
-        <Divider />
-      </Box>
-      {accountInfo?.value?.data?.parsed && (
-        <AccountDataParsed parsedInfo={accountInfo?.value?.data} />
-      )}
+      <Center marginBottom={10} marginTop={5}>
+        <Box>
+          <Heading>{isProgram ? "Program" : "Account"}</Heading>
+          <Badge colorScheme="red">
+            <Text fontSize={24}>{router?.query?.account}</Text>
+          </Badge>
+          <Divider />
+          <Stat marginTop={5}>
+            <StatLabel color={"teal"}>Owner</StatLabel>
+            <StatNumber>
+              <Link
+                color="red.500"
+                href={`/address/${accountInfo?.value?.owner}`}
+              >
+                {accountInfo?.value?.owner}
+              </Link>
+            </StatNumber>
+          </Stat>
+          <Stat>
+            <StatLabel color={"teal"}>SOL</StatLabel>
+            <StatNumber>
+              {(Number(accountInfo?.value?.lamports) / 1000000000).toFixed(9)}
+            </StatNumber>
+          </Stat>
+          <Divider />
+        </Box>
+        {accountInfo?.value?.data?.parsed && (
+          <AccountDataParsed parsedInfo={accountInfo?.value?.data} />
+        )}
+      </Center>
     </Container>
   );
 };
