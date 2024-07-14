@@ -2,6 +2,9 @@
 
 A basic Solana blockchain explorer that is meant to be simple and fast.
 
+Live Demo:
+https://solana-explorer-talent-olympics.vercel.app/
+
 ![homepage](./docs/screenshot-home.png)
 
 # Transaction Page
