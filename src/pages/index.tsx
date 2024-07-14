@@ -118,17 +118,8 @@ const TransactionTable = (params: TransactionTableParams) => {
 
 const Home: NextPage = () => {
   const { epochInfo, blockInfo } = useSolanaBlockchain();
-
-  console.log("epochInfo", epochInfo);
-  console.log("blockInfo", blockInfo);
-
   return (
     <div>
-      {/* <Head>
-        <title>Solana DevNet Explorer for Talent Olympics</title>
-        <meta name="description" content="Solana Devnet Explorer" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head> */}
       <Box>
         <Center>
           <Heading
@@ -150,7 +141,14 @@ const Home: NextPage = () => {
             size="lg"
             onKeyDown={(e) => {
               if (e.key ==='Enter') {
-                window.location.href = "/tx/" + e.currentTarget.value;
+
+                // check length
+                if (e.currentTarget.value.split('').length < 88) {
+                  window.location.href = "/address/" + e.currentTarget.value;
+                } else {
+                  window.location.href = "/tx/" + e.currentTarget.value;
+                }
+
               }
             }}
           />

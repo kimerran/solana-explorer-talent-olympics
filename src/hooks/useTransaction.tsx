@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { rpcRequestFetch } from "./useSolana";
 
-
 export type InstructionType = {
-  id? : string;
+  id?: string;
   program?: string;
   programId: string;
   info?: {
@@ -24,17 +23,18 @@ export type InstructionType = {
 export type TxInfoType = {
   transaction: {
     message: {
-      instructions: InstructionType[]
+      instructions: InstructionType[];
     };
     signatures: string[];
   };
   meta: {
     fee: number;
-    innerInstructions: InstructionType[]
-  },
+    innerInstructions: InstructionType[];
+  };
   blockTime: string;
   slot: string;
 };
+
 const prepareGetTransactionInfoBody = (signature: string) => {
   return {
     jsonrpc: "2.0",
@@ -54,22 +54,16 @@ export function useTransaction(signature: string) {
   const [txInfo, setTxInfo] = useState<TxInfoType>();
 
   function getTransactionInfo() {
-
     if (signature) {
-        rpcRequestFetch(prepareGetTransactionInfoBody(signature), (data) => {
-
-          console.log('>>>>', data.result)
-
-
-            setTxInfo(data.result)
-    });
-      
+      rpcRequestFetch(prepareGetTransactionInfoBody(signature), (data) => {
+        setTxInfo(data.result);
+      });
     }
   }
 
   useEffect(() => {
-    getTransactionInfo()
-  }, [signature])
+    getTransactionInfo();
+  }, [signature]);
 
   return [txInfo];
 }

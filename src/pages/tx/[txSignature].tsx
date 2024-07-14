@@ -2,18 +2,13 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { v7 as newId } from "uuid";
-import { InstructionType, TxInfoType, useTransaction } from "../../hooks/useTransaction";
 import {
-  TableContainer,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Code,
+  InstructionType,
+  TxInfoType,
+  useTransaction,
+} from "../../hooks/useTransaction";
+import {
   Stack,
-  VStack,
   Box,
   Container,
   Text,
@@ -22,20 +17,16 @@ import {
   Divider,
   Heading,
   Badge,
-  IconButton,
   Tooltip,
   Textarea,
   Center,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { isObject } from "util";
 import {
   ChevronRightIcon,
-  InfoIcon,
   StarIcon,
   TimeIcon,
   TriangleDownIcon,
-  TriangleUpIcon,
 } from "@chakra-ui/icons";
 
 type TransactionTableParams = {
@@ -64,7 +55,12 @@ const InstructionDetailCard = (params: { ins: InstructionType }) => {
             {ins.program && (
               <Badge colorScheme="purple">Program: {ins.program}</Badge>
             )}
-            <Badge colorScheme="green">Program Id: {ins.programId}</Badge>
+            <Badge colorScheme="green">
+              <Link href={`/address/${ins.programId}`}>
+                Program Id:
+                {ins.programId}
+              </Link>
+            </Badge>
           </Text>
           <Text>
             <Badge>{ins.parsed?.type}</Badge>
@@ -137,7 +133,8 @@ const InstructionsTable = (params: TransactionTableParams) => {
 
 const TxSignatureDetails: NextPage = () => {
   const router = useRouter();
-  const [instructionsData, setInstructionData] = useState<(InstructionType | undefined)[]>();
+  const [instructionsData, setInstructionData] =
+    useState<(InstructionType | undefined)[]>();
   const [txInfo] = useTransaction(router?.query?.txSignature as string);
 
   useEffect(() => {
@@ -154,18 +151,16 @@ const TxSignatureDetails: NextPage = () => {
 
       const addIds = (instructions: InstructionType[]) => {
         return instructions.map((ins) => {
-          return Object.assign({}, ins, { id: newId()})
-        })
-      }
+          return Object.assign({}, ins, { id: newId() });
+        });
+      };
 
       if (innerInstructions.length > 0) {
         const flattenInstructions = innerInstructions.flatMap(
           (i) => i.instructions || []
         );
-        console.log(">> flattenInstructions", flattenInstructions);
         setInstructionData(addIds(flattenInstructions));
       } else if (instructions.length > 0) {
-        
         setInstructionData(addIds(instructions));
       }
     }
@@ -173,7 +168,6 @@ const TxSignatureDetails: NextPage = () => {
 
   return (
     <Container maxW={1200} marginTop={0}>
-
       <Center>
         <Heading
           role="heading"
@@ -184,11 +178,7 @@ const TxSignatureDetails: NextPage = () => {
           p={4}
           bg="#008080"
         >
-          <Link href="/">
-          Solana DevNet Explorer 🤙🤙🤙
-
-          </Link>
-        
+          <Link href="/">Solana DevNet Explorer 🤙🤙🤙</Link>
         </Heading>
       </Center>
 

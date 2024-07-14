@@ -17,7 +17,6 @@ export type TransactionInfoType = {
   };
   id: string;
   transaction: {
-
     message: any;
     signatures: String[];
   };
@@ -57,7 +56,10 @@ const prepareGetBlockInfoBody = (blockHeight: number) => {
   };
 };
 
-export const rpcRequestFetch = (body: any, callbackFunction: (value: any) => any) => {
+export const rpcRequestFetch = (
+  body: any,
+  callbackFunction: (value: any) => any
+) => {
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -90,8 +92,6 @@ export function useSolanaBlockchain() {
     );
   }
 
-  console.log('epochInfo', epochInfo)
-
   useEffect(() => {
     getEpochInfo();
   }, []);
@@ -103,5 +103,5 @@ export function useSolanaBlockchain() {
     }
   }, [epochInfo]);
 
-  return  { epochInfo, blockInfo };
+  return { epochInfo, blockInfo };
 }
