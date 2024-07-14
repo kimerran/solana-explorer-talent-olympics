@@ -92,7 +92,7 @@ const TransactionTable = (params: TransactionTableParams) => {
             const feeInSol = Number(tx.meta.fee) / 1000000000;
 
             return (
-              <Tr key={tx.transaction.signatures[0]}>
+              <Tr key={tx.id}>
                 <Td>
                   <Link color="red" href={`tx/${tx.transaction.signatures[0]}`}>
                     <Text fontFamily={"courier new"} fontSize={10}>
@@ -117,7 +117,7 @@ const TransactionTable = (params: TransactionTableParams) => {
 };
 
 const Home: NextPage = () => {
-  const [epochInfo, blockInfo] = useSolanaBlockchain();
+  const { epochInfo, blockInfo } = useSolanaBlockchain();
 
   console.log("epochInfo", epochInfo);
   console.log("blockInfo", blockInfo);
@@ -149,9 +149,8 @@ const Home: NextPage = () => {
             placeholder="Search DevNet Transaction ex. 32o3ZzfxzLjH3cufaUB91ERaBBRkqWTZHYuUtuMFS8ooaVT8FttfzEh3V3eaSfZ3rK6TYwzyu7KELfMGhbRv3NJV"
             size="lg"
             onKeyDown={(e) => {
-              console.log(e)
-              if (e.keyCode === 13) {
-                window.location = '/tx/' + e.target.value;
+              if (e.key ==='Enter') {
+                window.location.href = "/tx/" + e.currentTarget.value;
               }
             }}
           />
@@ -165,21 +164,6 @@ const Home: NextPage = () => {
             <TransactionTable transactions={blockInfo?.transactions} />
           </Center>
         </Box>
-        {/* <Center>
-          <UnorderedList mt={8} listStyleType="none">
-            <Flexmillimetres (mm)(({ route, text }) => (
-                <ListItem
-                  key={route}
-                  fontSize="2xl"
-                  textDecoration="underline"
-                  color="#376fec"
-                >
-                  <Link href={route}>{text}</Link>
-                </ListItem>
-              ))}
-            </Flex>
-          </UnorderedList>
-        </Center> */}
       </Box>
     </div>
   );

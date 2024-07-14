@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { v7 as newId } from "uuid";
 
-export type EpochInfoType = {
+export type EpochInfo = {
   absoluteSlot: number;
   blockHeight: number;
   epoch: number;
@@ -15,14 +15,16 @@ export type TransactionInfoType = {
     computeUnitsConsumed: number;
     fee: number;
   };
+  id: string;
   transaction: {
+
     message: any;
     signatures: String[];
   };
 };
 
 export type EpochInfoParams = {
-  epochInfo: EpochInfoType;
+  epochInfo: EpochInfo;
 };
 export type TransactionTableParams = {
   transactions: TransactionInfoType[] | undefined;
@@ -73,7 +75,7 @@ type BlockInfo = {
 };
 
 export function useSolanaBlockchain() {
-  const [epochInfo, setEpochInfo] = useState();
+  const [epochInfo, setEpochInfo] = useState<EpochInfo>();
   const [blockInfo, setBlockInfo] = useState<BlockInfo>();
 
   function getEpochInfo() {
@@ -87,6 +89,9 @@ export function useSolanaBlockchain() {
       setBlockInfo(data.result)
     );
   }
+
+  console.log('epochInfo', epochInfo)
+
   useEffect(() => {
     getEpochInfo();
   }, []);
@@ -98,5 +103,5 @@ export function useSolanaBlockchain() {
     }
   }, [epochInfo]);
 
-  return [epochInfo, blockInfo];
+  return  { epochInfo, blockInfo };
 }

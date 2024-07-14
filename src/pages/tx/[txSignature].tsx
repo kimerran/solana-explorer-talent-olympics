@@ -1,7 +1,8 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useTransaction } from "../../hooks/useTransaction";
+import { v7 as newId } from "uuid";
+import { InstructionType, TxInfoType, useTransaction } from "../../hooks/useTransaction";
 import {
   TableContainer,
   Table,
@@ -36,30 +37,9 @@ import {
   TriangleDownIcon,
   TriangleUpIcon,
 } from "@chakra-ui/icons";
-import { Head } from "next/document";
 
-type InstructionType = {
-  program?: string;
-  programId: string;
-  info?: {
-    amount: string;
-    authority: string;
-    destination: string;
-    source: string;
-  };
-  parsed?: {
-    type: string;
-  };
-};
 type TransactionTableParams = {
-  instructions: InstructionType[];
-};
-
-type TxInfoType = {
-  transaction: {
-    message: any;
-    signatures: string[];
-  };
+  instructions: (InstructionType | undefined)[];
 };
 
 const InstructionDetailCard = (params: { ins: InstructionType }) => {
@@ -92,10 +72,6 @@ const InstructionDetailCard = (params: { ins: InstructionType }) => {
               asdas
             </Textarea>
           </Text>
-
-          {/* <Tooltip  hasArrow label={toopTipDetails}>
-            <InfoIcon />
-          </Tooltip> */}
         </Stack>
       </CardBody>
     </Card>
@@ -150,37 +126,10 @@ const TxInfoCard = (params: { tx: TxInfoType }) => {
 const InstructionsTable = (params: TransactionTableParams) => {
   const { instructions } = params;
 
-  console.log("instructions", instructions);
   return (
     <>
       {instructions?.map((i) => {
-        // const parsedInfo = i.parsed?.info || {};
-        return <InstructionDetailCard key={i} ins={i} />;
-        // return (
-        //   <Tr>
-        //     <Td>{i.program || i.programId}</Td>
-        //     <Td>{i.parsed?.type || "NA"}</Td>
-        //     <Td>
-        //         <InstructionDetailCard ins={i} />
-        //       {/* {parsedInfo && (
-        //         <VStack direction={"row"}>
-        //           {Object.keys(parsedInfo).map((key) => {
-        //             let value: string = parsedInfo[key];
-        //             if (typeof parsedInfo === "object") {
-        //               value = JSON.stringify(value, null, 2);
-        //             }
-
-        //             return (
-        //               <Code maxWidth={250}>
-        //                 {key}:{`${value.substring(0, 250)}`}
-        //               </Code>
-        //             );
-        //           })}
-        //         </VStack> */}
-
-        //     </Td>
-        //   </Tr>
-        // );
+        return <InstructionDetailCard key={i?.id} ins={i!} />;
       })}
     </>
   );
@@ -188,43 +137,36 @@ const InstructionsTable = (params: TransactionTableParams) => {
 
 const TxSignatureDetails: NextPage = () => {
   const router = useRouter();
-  const [instructionsData, setInstructionData] = useState();
-
-  console.log("router.queery", router.query);
-
+  const [instructionsData, setInstructionData] = useState<(InstructionType | undefined)[]>();
   const [txInfo] = useTransaction(router?.query?.txSignature as string);
-  console.log("txInfo", txInfo);
-
-  // const { result } = txInfo;
 
   useEffect(() => {
     // check if innerInstructions lenght is more
     if (txInfo) {
       const {
-        result: {
-          meta: { innerInstructions },
-        },
+        meta: { innerInstructions },
       } = txInfo;
       const {
-        result: {
-          transaction: {
-            message: { instructions },
-          },
+        transaction: {
+          message: { instructions },
         },
       } = txInfo;
 
-      console.log(">> innerInstructions", innerInstructions);
-      console.log(">> insturctions", instructions);
+      const addIds = (instructions: InstructionType[]) => {
+        return instructions.map((ins) => {
+          return Object.assign({}, ins, { id: newId()})
+        })
+      }
 
       if (innerInstructions.length > 0) {
-        //. flatten
         const flattenInstructions = innerInstructions.flatMap(
-          (i) => i.instructions
+          (i) => i.instructions || []
         );
         console.log(">> flattenInstructions", flattenInstructions);
-        setInstructionData(flattenInstructions);
+        setInstructionData(addIds(flattenInstructions));
       } else if (instructions.length > 0) {
-        setInstructionData(instructions);
+        
+        setInstructionData(addIds(instructions));
       }
     }
   }, [txInfo]);
@@ -254,23 +196,13 @@ const TxSignatureDetails: NextPage = () => {
         <Heading>Transaction</Heading>
 
         <Divider />
-        {txInfo && <TxInfoCard tx={txInfo.result} />}
+        {txInfo && <TxInfoCard tx={txInfo} />}
       </Box>
 
       <Box>
         <Text fontSize={32}>Instructions</Text>
-        {txInfo && <InstructionsTable instructions={instructionsData} />}
-
-        {/* <Card maxW={800}>
-          <CardBody>
-            <Stack>
-              <Heading>vote</Heading>
-              <Badge>compactupdatevotestate</Badge>
-            </Stack>
-          </CardBody>
-        </Card> */}
+        {txInfo && <InstructionsTable instructions={instructionsData!} />}
       </Box>
-      {/*  */}
     </Container>
   );
 };
